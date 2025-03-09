@@ -18,7 +18,7 @@ jobs:
         run: |
           mkdir -p skiasharp && cd skiasharp
           git init && git remote add origin https://github.com/mono/SkiaSharp.git
-          git fetch --depth 1 origin release/3.0.0-preview.4
+          git fetch --depth 1 origin release/3.116.1
           git checkout --recurse-submodules -q FETCH_HEAD
           git submodule update --init --depth 1
           
