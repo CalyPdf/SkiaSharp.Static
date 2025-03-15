@@ -2,6 +2,7 @@
 # See "gn args <out_dir> --list" for available build arguments.
 target_os="win"
 target_cpu="x64"
+is_debug=false
 is_static_skiasharp=true
 skia_enable_fontmgr_win_gdi=false
 skia_use_dng_sdk=true
