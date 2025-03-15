@@ -14,8 +14,8 @@ skia_use_system_libjpeg_turbo=false
 skia_use_system_libpng=false
 skia_use_system_libwebp=false
 skia_use_system_zlib=false
-skia_use_vulkan=true
-skia_use_angle=true
-skia_enable_skottie=true
-skia_enable_gpu=true
+skia_use_vulkan=false
+skia_use_angle=false
+skia_enable_skottie=false
+skia_enable_gpu=false
 extra_cflags=[ "-DSKIA_C_DLL", "/MT", "/EHsc", "/Z7", "-D_HAS_AUTO_PTR_ETC=1" ]
