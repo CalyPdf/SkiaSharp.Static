@@ -21,7 +21,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: ./.github/actions/setup
-      - run: winget install --id LLVM.LLVM --accept-package-agreements --accept-source-agreements --disable-interactivity
+      - run: winget install --id LLVM.LLVM --version 21.1.0 --accept-package-agreements --accept-source-agreements --disable-interactivity
       - uses: ./.github/actions/build
       - uses: ./.github/actions/deploy
         with:
