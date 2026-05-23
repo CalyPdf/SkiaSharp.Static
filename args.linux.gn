@@ -1,0 +1,35 @@
+# Linux build arguments. target_cpu is appended per-arch by build-linux action.
+target_os = "linux"
+
+is_official_build  = true
+is_static_skiasharp = true
+
+skia_enable_tools   = false
+skia_enable_pdf     = false
+skia_enable_skottie = false
+skia_enable_fontmgr_fontconfig = true
+
+skia_use_angle = false
+skia_use_dng_sdk = false
+skia_use_icu = false
+skia_use_piex = false
+skia_use_sfntly = false
+skia_use_system_expat = false
+skia_use_system_libjpeg_turbo = false
+skia_use_system_libpng = false
+skia_use_system_libwebp = false
+skia_use_system_zlib = false
+skia_use_vma = false
+skia_use_vulkan = false
+
+cc  = "clang-21"
+cxx = "clang++-21"
+
+extra_cflags = [
+  "-fPIC",
+  "-fvisibility=hidden",
+  "-fvisibility-inlines-hidden",
+]
+extra_ldflags = [
+  "-fuse-ld=lld-21",
+]

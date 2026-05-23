@@ -1,0 +1,31 @@
+<Project Sdk="Microsoft.NET.Sdk">
+    <PropertyGroup>
+        <TargetFramework>net8.0</TargetFramework>
+        <IncludeBuildOutput>false</IncludeBuildOutput>
+        <LinuxNativeRoot>$(MSBuildThisFileDirectory)../out</LinuxNativeRoot>
+    </PropertyGroup>
+
+    <PropertyGroup>
+        <PackageId>2ndLAB.SkiaSharp.Static.Linux</PackageId>
+        <Version>3.119.0</Version>
+        <Authors>2ndLAB</Authors>
+        <Description>SkiaSharp static library for Avalonia AOT on Linux (x64, arm64)</Description>
+        <PackageLicenseExpression>Unlicense</PackageLicenseExpression>
+        <PackageProjectUrl>https://github.com/2ndlab/SkiaSharp.Static</PackageProjectUrl>
+        <RepositoryUrl>https://github.com/2ndlab/SkiaSharp.Static</RepositoryUrl>
+        <RepositoryType>git</RepositoryType>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <None Include="buildTransitive/$(PackageId).targets" Pack="true" PackagePath="buildTransitive" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <None Include="$(LinuxNativeRoot)/linux-x64/native/libskia.a"           Pack="true" PackagePath="runtimes/linux-x64/native/" />
+        <None Include="$(LinuxNativeRoot)/linux-x64/native/libSkiaSharp.a"      Pack="true" PackagePath="runtimes/linux-x64/native/" />
+        <None Include="$(LinuxNativeRoot)/linux-x64/native/libHarfBuzzSharp.a"  Pack="true" PackagePath="runtimes/linux-x64/native/" />
+        <None Include="$(LinuxNativeRoot)/linux-arm64/native/libskia.a"          Pack="true" PackagePath="runtimes/linux-arm64/native/" />
+        <None Include="$(LinuxNativeRoot)/linux-arm64/native/libSkiaSharp.a"     Pack="true" PackagePath="runtimes/linux-arm64/native/" />
+        <None Include="$(LinuxNativeRoot)/linux-arm64/native/libHarfBuzzSharp.a" Pack="true" PackagePath="runtimes/linux-arm64/native/" />
+    </ItemGroup>
+</Project>
