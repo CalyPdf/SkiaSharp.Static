@@ -1,0 +1,82 @@
+name: Build action (Linux)
+description: Build action for Linux
+inputs:
+  arch:
+    description: "Architecture: x64 or arm64"
+    required: true
+runs:
+  using: "composite"
+  steps:
+    - name: Create build directory and seed args.gn
+      shell: nu {0}
+      run: |
+        mkdir skiasharp $env.BuildDir
+        cp args.linux.gn $"($env.BuildDir)/args.gn"
+        $"\ntarget_cpu = \"${{ inputs.arch }}\"\n" | save --append $"($env.BuildDir)/args.gn"
+
+    - name: Clone source
+      shell: nu {0}
+      run: |
+        cd skiasharp
+        git init
+        git remote add origin https://github.com/mono/SkiaSharp.git
+        git fetch --depth 1 origin $"release/($env.SkiaSharpVersion)"
+        git checkout --recurse-submodules -q FETCH_HEAD
+        git submodule update --init --depth 1
+
+    - name: Restore source cache
+      uses: actions/cache/restore@v4
+      id: restore-src-cache
+      with:
+        path: |
+          skiasharp/externals/skia/third_party
+        key: ${{ runner.os }}-${{ inputs.arch }}-src-cache-${{ env.SkiaSharpVersion }}
+
+    - name: Prepare build skia
+      shell: nu {0}
+      run: |
+        cd skiasharp/externals/skia
+        uv run --python 3.12 -- python tools/git-sync-deps
+        gn gen $env.BuildDir
+
+    - name: Save src cache immediately
+      id: save-src-cache
+      if: always() && steps.restore-src-cache.outputs.cache-hit != 'true'
+      uses: actions/cache/save@v4
+      with:
+        key: ${{ steps.restore-src-cache.outputs.cache-primary-key }}
+        path: |
+          skiasharp/externals/skia/third_party
+
+    - name: Build skia, SkiaSharp, and HarfBuzzSharp
+      shell: nu {0}
+      run: |
+        cd skiasharp/externals/skia
+        autoninja -C $env.BuildDir skia SkiaSharp HarfBuzzSharp
+
+    - name: Inspect build outputs
+      shell: bash
+      working-directory: ${{ env.BuildDir }}
+      run: ls -la *.a libskia.a libSkiaSharp.a libHarfBuzzSharp.a 2>&1 || true
+
+    - name: Package libSkiaSharp
+      shell: nu {0}
+      working-directory: ${{ env.BuildDir }}
+      run: |
+        7z a -y -mx9 $"($env.SkiaSharpName).7z" libskia.a libSkiaSharp.a
+        mv $"($env.SkiaSharpName).7z" $env.GITHUB_WORKSPACE
+
+    - name: Package libHarfBuzzSharp
+      shell: nu {0}
+      working-directory: ${{ env.BuildDir }}
+      run: |
+        7z a -y -mx9 $"($env.HarfBuzzSharpName).7z" libHarfBuzzSharp.a
+        mv $"($env.HarfBuzzSharpName).7z" $env.GITHUB_WORKSPACE
+
+    - name: Upload build artifact for pack job
+      uses: actions/upload-artifact@v4
+      with:
+        name: skia-${{ inputs.arch }}
+        path: |
+          ${{ env.SkiaSharpName }}.7z
+          ${{ env.HarfBuzzSharpName }}.7z
