@@ -3,3 +3,4 @@ nuget/bin
 nuget/obj
 SkiaSharp.Static.sln
 /.vs
+/docs
