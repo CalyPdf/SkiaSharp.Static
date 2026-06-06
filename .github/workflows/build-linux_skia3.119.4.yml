@@ -11,7 +11,7 @@ on:
       - "nuget/buildTransitive/2ndLAB.SkiaSharp.Static.Linux.targets"
 
 env:
-  SkiaSharpVersion: 3.119.4-preview.1
+  SkiaSharpVersion: 3.119.4
 
 jobs:
   build:
